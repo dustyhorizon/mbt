@@ -78,6 +78,12 @@ var RootCmd = &cobra.Command{
 		if parent != nil && parent.Name() == "describe" && dependents && name == "" {
 			return e.NewError(lib.ErrClassUser, "--dependents flag can only be specified with the --name (-n) flag")
 		}
+		if parent != nil && parent.Name() == "describe" && depends && name == "" {
+			return e.NewError(lib.ErrClassUser, "--depends flag can only be specified with the --name (-n) flag")
+		}
+		if parent != nil && parent.Name() == "describe" && dependents && depends {
+			return e.NewError(lib.ErrClassUser, "--dependents and --depends flags cannot be used together")
+		}
 
 		level := lib.LogLevelNormal
 		if debug {

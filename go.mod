@@ -8,7 +8,7 @@ require (
 	github.com/go-yaml/yaml v2.1.0+incompatible
 	github.com/inconshreveable/mousetrap v1.0.0
 	github.com/libgit2/git2go/v28 v28.8.6
-	github.com/mattn/goveralls v0.0.7 // indirect
+	github.com/mattn/goveralls v0.0.8 // indirect
 	github.com/pmezard/go-difflib v1.0.0
 	github.com/russross/blackfriday v0.0.0-20170728175326-4048872b16cc
 	github.com/sirupsen/logrus v1.7.0

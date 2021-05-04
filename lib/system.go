@@ -268,6 +268,7 @@ type FilterOptions struct {
 	Name       string
 	Fuzzy      bool
 	Dependents bool
+	Depends    bool
 }
 
 // CmdOptions defines various options required by methods executing
@@ -459,9 +460,19 @@ func FuzzyDependentsFilter(name string) *FilterOptions {
 	return &FilterOptions{Name: name, Fuzzy: true, Dependents: true}
 }
 
+// FuzzyDependsFilter is a helper to create a fuzzy match FilterOptions
+func FuzzyDependsFilter(name string) *FilterOptions {
+	return &FilterOptions{Name: name, Fuzzy: true, Depends: true}
+}
+
 // ExactMatchDependentsFilter is a helper to create an exact match FilterOptions
 func ExactMatchDependentsFilter(name string) *FilterOptions {
 	return &FilterOptions{Name: name, Dependents: true}
+}
+
+// ExactMatchDependsFilter is a helper to create an exact match FilterOptions
+func ExactMatchDependsFilter(name string) *FilterOptions {
+	return &FilterOptions{Name: name, Depends: true}
 }
 
 func initSystem(log Log, repo Repo, mb ManifestBuilder, discover Discover, reducer Reducer, workspaceManager WorkspaceManager, processManager ProcessManager) System {

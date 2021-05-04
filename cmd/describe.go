@@ -30,6 +30,7 @@ var (
 	toJSON     bool
 	toGraph    bool
 	dependents bool
+	depends    bool
 )
 
 func init() {
@@ -53,6 +54,7 @@ func init() {
 	describeCmd.PersistentFlags().BoolVar(&toJSON, "json", false, "Format output as json")
 	describeCmd.PersistentFlags().BoolVar(&toGraph, "graph", false, "Format output as dot graph")
 	describeCmd.PersistentFlags().BoolVar(&dependents, "dependents", false, "Output dependents on potential change")
+	describeCmd.PersistentFlags().BoolVar(&depends, "depends", false, "Output module depends on this. To be used with name")
 
 	describeCmd.AddCommand(describeCommitCmd)
 	describeCmd.AddCommand(describeBranchCmd)
@@ -83,7 +85,7 @@ var describeBranchCmd = &cobra.Command{
 			return err
 		}
 
-		m, err = m.ApplyFilters(&lib.FilterOptions{Name: name, Fuzzy: fuzzy, Dependents: dependents})
+		m, err = m.ApplyFilters(&lib.FilterOptions{Name: name, Fuzzy: fuzzy, Dependents: dependents, Depends: depends})
 
 		if err != nil {
 			return err
@@ -101,7 +103,7 @@ var describeHeadCmd = &cobra.Command{
 			return err
 		}
 
-		m, err = m.ApplyFilters(&lib.FilterOptions{Name: name, Fuzzy: fuzzy, Dependents: dependents})
+		m, err = m.ApplyFilters(&lib.FilterOptions{Name: name, Fuzzy: fuzzy, Dependents: dependents, Depends: depends})
 
 		if err != nil {
 			return err
@@ -126,7 +128,7 @@ var describeLocalCmd = &cobra.Command{
 				return err
 			}
 
-			m, err = m.ApplyFilters(&lib.FilterOptions{Name: name, Fuzzy: fuzzy, Dependents: dependents})
+			m, err = m.ApplyFilters(&lib.FilterOptions{Name: name, Fuzzy: fuzzy, Dependents: dependents, Depends: depends})
 		} else {
 			m, err = system.ManifestByWorkspaceChanges()
 		}
@@ -155,7 +157,7 @@ var describePrCmd = &cobra.Command{
 			return err
 		}
 
-		m, err = m.ApplyFilters(&lib.FilterOptions{Name: name, Fuzzy: fuzzy, Dependents: dependents})
+		m, err = m.ApplyFilters(&lib.FilterOptions{Name: name, Fuzzy: fuzzy, Dependents: dependents, Depends: depends})
 
 		if err != nil {
 			return err
@@ -189,7 +191,7 @@ var describeCommitCmd = &cobra.Command{
 			return err
 		}
 
-		m, err = m.ApplyFilters(&lib.FilterOptions{Name: name, Fuzzy: fuzzy, Dependents: dependents})
+		m, err = m.ApplyFilters(&lib.FilterOptions{Name: name, Fuzzy: fuzzy, Dependents: dependents, Depends: depends})
 
 		if err != nil {
 			return err
@@ -250,7 +252,7 @@ var describeDiffCmd = &cobra.Command{
 			return err
 		}
 
-		m, err = m.ApplyFilters(&lib.FilterOptions{Name: name, Fuzzy: fuzzy, Dependents: dependents})
+		m, err = m.ApplyFilters(&lib.FilterOptions{Name: name, Fuzzy: fuzzy, Dependents: dependents, Depends: depends})
 
 		if err != nil {
 			return err
@@ -279,7 +281,7 @@ func output(mods lib.Modules) error {
 		}
 		fmt.Println(string(buff))
 	} else if toGraph {
-		if dependents {
+		if dependents || depends {
 			fmt.Println(mods.GroupedSerializeAsDot())
 		} else {
 			fmt.Println(mods.SerializeAsDot())

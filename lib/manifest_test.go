@@ -1218,9 +1218,21 @@ func TestApplyFilter(t *testing.T) {
 	assert.Equal(t, "app-b", m1.Modules[0].Name())
 	assert.Equal(t, "app-a", m1.Modules[1].Name())
 
+	m1, err = m.ApplyFilters(ExactMatchDependsFilter("app-b"))
+	check(t, err)
+	assert.Len(t, m1.Modules, 2)
+	assert.Equal(t, "app-a", m1.Modules[0].Name())
+	assert.Equal(t, "app-b", m1.Modules[1].Name())
+
 	m1, err = m.ApplyFilters(FuzzyDependentsFilter("app-b"))
 	check(t, err)
 	assert.Len(t, m1.Modules, 2)
 	assert.Equal(t, "app-b", m1.Modules[0].Name())
 	assert.Equal(t, "app-a", m1.Modules[1].Name())
+
+	m1, err = m.ApplyFilters(FuzzyDependsFilter("app-b"))
+	check(t, err)
+	assert.Len(t, m1.Modules, 2)
+	assert.Equal(t, "app-a", m1.Modules[0].Name())
+	assert.Equal(t, "app-b", m1.Modules[1].Name())
 }

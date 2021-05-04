@@ -118,6 +118,16 @@ func (m *Manifest) ApplyFilters(filterOptions *FilterOptions) (*Manifest, error)
 		}
 	}
 
+	if filterOptions.Depends {
+		var err error
+
+		m.Modules, err = m.Modules.expandRequiresDependencies()
+
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	return m, nil
 }
 
