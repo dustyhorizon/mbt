@@ -1186,8 +1186,8 @@ func TestManifestByWorkspaceChangesForRootModule(t *testing.T) {
 func TestApplyFilter(t *testing.T) {
 	appA := &Module{metadata: &moduleMetadata{spec: &Spec{Name: "app-a"}}}
 	appB := &Module{
-		metadata:   &moduleMetadata{spec: &Spec{Name: "app-b", Dependencies: []string{"app-a"}}},
-		requiredBy: Modules{appA},
+		metadata: &moduleMetadata{spec: &Spec{Name: "app-b", Dependencies: []string{"app-a"}}},
+		requires: Modules{appA},
 	}
 	appAa := &Module{metadata: &moduleMetadata{spec: &Spec{Name: "app-aa"}}}
 
@@ -1214,9 +1214,8 @@ func TestApplyFilter(t *testing.T) {
 
 	m1, err = m.ApplyFilters(ExactMatchDependentsFilter("app-b"))
 	check(t, err)
-	assert.Len(t, m1.Modules, 2)
+	assert.Len(t, m1.Modules, 1)
 	assert.Equal(t, "app-b", m1.Modules[0].Name())
-	assert.Equal(t, "app-a", m1.Modules[1].Name())
 
 	m1, err = m.ApplyFilters(ExactMatchDependsFilter("app-b"))
 	check(t, err)
@@ -1226,9 +1225,8 @@ func TestApplyFilter(t *testing.T) {
 
 	m1, err = m.ApplyFilters(FuzzyDependentsFilter("app-b"))
 	check(t, err)
-	assert.Len(t, m1.Modules, 2)
+	assert.Len(t, m1.Modules, 1)
 	assert.Equal(t, "app-b", m1.Modules[0].Name())
-	assert.Equal(t, "app-a", m1.Modules[1].Name())
 
 	m1, err = m.ApplyFilters(FuzzyDependsFilter("app-b"))
 	check(t, err)
